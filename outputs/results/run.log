@@ -1,0 +1,14 @@
+Common sample: 2002Q2-2025Q3, 94 observations.
+Log growth; intercept plus Q1-Q3 controls (Q4 reference).
+EA19/EA20 composition, M3/M2 and original aggregation remain limitations.
+Estimating EA and US baseline with bootstrap...
+EA: root 0.969968; unstable bootstrap draws 24/1000; EGM FEVD 1.84%
+US: root 0.879193; unstable bootstrap draws 1/1000; EGM FEVD 6.96%
+Saved figures, tables and baseline.mat in outputs/.
+Common sample: 2002Q2-2025Q3, 94 observations.
+Log growth; intercept plus Q1-Q3 controls (Q4 reference).
+EA19/EA20 composition, M3/M2 and original aggregation remain limitations.
+Estimating EA and US baseline with bootstrap...
+EA: root 0.969968; unstable bootstrap draws 24/1000; EGM FEVD 1.84%
+US: root 0.879193; unstable bootstrap draws 1/1000; EGM FEVD 6.96%
+Saved figures, tables and baseline.mat in outputs/.
