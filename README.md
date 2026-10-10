@@ -133,8 +133,6 @@ Six regression tests passed, including a synthetic quarterly-controls model, agr
 4. Consider a parsimonious BVAR with pandemic-volatility treatment before expanding to TVP-VAR. Add consumption/savings or energy mechanisms selectively.
 5. Keep forecasting and machine learning as a separate out-of-sample research design.
 
-The [initial Italian review](docs/econometric-review-it.md) records the issues found before implementation. References to old file paths and results there are historical.
-
 ## Selected literature
 
 - [Lenza and Primiceri, How to estimate a VAR after March 2020](https://www.ecb.europa.eu/pub/pdf/scpwps/ecb.wp2461~fe732949ee.en.pdf): pandemic volatility.
