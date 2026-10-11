@@ -28,9 +28,9 @@ Or from a terminal with MATLAB on its executable path:
 matlab -batch "main"
 ~~~
 
-The driver loads the existing input snapshot, estimates two baseline models with 1,000 residual-bootstrap draws each, computes four point-estimate sensitivity models, and saves all tables and figures automatically. A fixed random seed (20261010) makes a given configuration reproducible. Source workbooks are read only.
+The driver loads the existing input snapshot, estimates two baseline models with 1,000 residual-bootstrap draws each, computes measurement sensitivities and sample/ordering robustness exercises, and saves all tables and figures automatically. A fixed random seed (20261010) makes a given configuration reproducible. Source workbooks are read only.
 
-To regenerate only the five current PNG/PDF figures from saved results, run **refresh_figures**. Run main instead after changing model settings, data or estimation code. Figure exports force a light theme, white background and dark text independently of the macOS theme. Historical images in archive/figures are preserved as original records and are not used by the README. Neither command downloads new source data or automatically rewrites the README's numerical discussion.
+To regenerate only the current PNG/PDF figures from saved results, run **refresh_figures**. Run main instead after changing model settings, data or estimation code. Figure exports force a light theme, white background and dark text independently of the macOS theme. Historical images in archive/figures are preserved as original records and are not used by the README. Neither command downloads new source data or automatically rewrites the README's numerical discussion.
 
 Tests:
 
@@ -55,7 +55,7 @@ data/raw/                      Original source extracts and FRED export
 outputs/figures/                Current generated PNG and vector PDF figures
 outputs/tables/                 Inputs, FEVD, diagnostics and sensitivity CSVs
 outputs/results/               Local baseline.mat and execution log
-docs/                          Data dictionary and historical econometric review
+docs/                          Data dictionary and robustness methods
 experiments/sign_restrictions/  Unvalidated prototypes, outside baseline path
 archive/                       Earlier script, figures and editor backups
 ~~~
@@ -113,9 +113,30 @@ These are conditional point estimates, not percentages of realised pandemic infl
 | Consistent log growth | 1.57% | 5.83% |
 | Log growth + quarterly controls | 1.84% | 6.96% |
 
-The country difference remains in the point estimates. This is a limited sensitivity exercise, not comprehensive robustness or causal evidence.
+The country difference remains in these measurement comparisons. The additional sample checks below show substantially greater sensitivity to individual periods.
 
-[Model input series](outputs/figures/model_inputs.png) show inflation and EGM before deterministic controls. All five figures are saved as PNG and vector PDF; [CSV outputs](outputs/tables/sensitivity.csv) and [diagnostics](outputs/tables/diagnostics.csv) provide underlying values.
+[Model input series](outputs/figures/model_inputs.png) show inflation and EGM before deterministic controls. All seven figures are saved as PNG and vector PDF; [CSV outputs](outputs/tables/sensitivity.csv) and [diagnostics](outputs/tables/diagnostics.csv) provide underlying values.
+
+### Pandemic observations and alternative orderings
+
+![Sample and ordering sensitivity](outputs/figures/robustness_samples_ordering.png)
+
+EGM share of quarterly-inflation forecast-error variance at 20 quarters, baseline ordering:
+
+| Sample treatment | EA | USA |
+| --- | ---: | ---: |
+| Full sample | 1.84% | 6.96% |
+| Pre-2020 | 1.54% | 3.73% |
+| Exclude 2020Q2 and its lag exposure | Unstable | 3.82% |
+| Exclude 2020 and its lag exposure | 0.44% | 3.32% |
+
+The four full-sample orderings preserve the US–EA ranking, but the magnitude depends strongly on the observations used. For US cumulative inflation, the EGM share falls from 22.81% to 5.83% when equations involving 2020 are excluded.
+
+![Single-quarter influence](outputs/figures/robustness_quarter_influence.png)
+
+Excluding 2021Q3 and its use in lags reduces the US inflation share to 0.95%, versus 2.59% in EA: even the ranking can reverse under individual-quarter exclusions. These diagnostics therefore do not establish a stable structural difference in monetary transmission.
+
+Exclusions remove regression equations whose target or either lag touches the specified quarter; the calendar is never compressed. Unstable estimates remain flagged in the tables with roots and sample sizes, and their FEVD shares are unavailable. These are influence diagnostics, not estimates of a counterfactual economy without COVID. Details, all 32 sample/order fits and 188 single-quarter fits are documented in [robustness methods and results](docs/robustness.md).
 
 ## Diagnostics and inference limits
 
@@ -123,15 +144,13 @@ The baseline has 18 regressors per equation. Maximum companion roots are approxi
 
 The covariance convention remains residual covariance divided by T−1 to keep the measurement comparison consistent with the previous implementation. This is not a degrees-of-freedom-adjusted estimator. The residual bootstrap assumes exchangeable innovations over time and does not account for pandemic volatility changes. Its coverage has not been validated here.
 
-Six regression tests passed, including a synthetic quarterly-controls model, agreement with the legacy estimator without seasonal controls, a known analytical FEVD, transformation identities and bootstrap cumulation. The complete estimation and figure-export pipeline was executed successfully. Successful execution does not establish econometric validity.
+Nine regression tests cover a synthetic quarterly-controls model, agreement with the legacy estimator without seasonal controls, a known analytical FEVD, transformation identities, bootstrap cumulation, correct lag handling in exclusions, variable identities after reordering and explicit handling of unstable fits. The complete estimation and figure-export pipeline was executed successfully. Successful execution does not establish econometric validity.
 
-## Next research steps
+## Remaining checks
 
-1. Verify original aggregation, source vintages and EA geography; rebuild a fully documented source-level dataset.
-2. Assess residual serial correlation, seasonal stability, lag order and pandemic volatility; compare justified orderings and common shock normalisations.
-3. Decide whether the central objective is exploratory dynamics or causal policy effects. The latter needs stronger identification and appropriate fiscal/monetary variables.
-4. Consider a parsimonious BVAR with pandemic-volatility treatment before expanding to TVP-VAR. Add consumption/savings or energy mechanisms selectively.
-5. Keep forecasting and machine learning as a separate out-of-sample research design.
+1. Verify and document the source series and quarterly aggregation, especially euro-area coverage and seasonal treatment.
+2. Check residual autocorrelation and sensitivity to the VAR lag length.
+3. Quantify uncertainty in the euro-area–US comparison before interpreting differences in point estimates.
 
 ## Selected literature
 
@@ -143,6 +162,10 @@ Six regression tests passed, including a synthetic quarterly-controls model, agr
 - [Giannone, Lenza and Primiceri (2015; working paper)](https://www.ecb.europa.eu/pub/pdf/scpwps/ecbwp1494.pdf): Bayesian shrinkage.
 - [Bernanke and Blanchard, An analysis of pandemic-era inflation in 11 economies (2024)](https://www.brookings.edu/articles/an-analysis-of-pandemic-era-inflation-in-11-economies/): comparative inflation research.
 - [BIS Bulletin 67 (2023)](https://www.bis.org/publ/bisbull67.htm): money growth and inflation.
+
+## AI assistance
+
+OpenAI Codex assisted with code refactoring, regression tests, figure generation, documentation and exploratory econometric checks. AI assistance does not constitute independent validation of the data, identification assumptions or conclusions. The project author remains responsible for reviewing the implementation and economic interpretation.
 
 ## License
 

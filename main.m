@@ -74,7 +74,12 @@ for stage=1:3
     end
 end
 writetable(sensitivity,fullfile(outputRoot,'tables','sensitivity.csv'));
+fprintf('Checking pandemic-quarter influence and alternative orderings...\n');
+results.robustness=RunRobustness(data,settings);
+writetable(results.robustness.summary,fullfile(outputRoot,'tables','robustness_summary.csv'));
+writetable(results.robustness.influence,fullfile(outputRoot,'tables','quarter_influence.csv'));
 save(fullfile(outputRoot,'results','baseline.mat'),'results','data','settings','-v7.3');
 ExportAnalysisFigures(results,data,fullfile(outputRoot,'figures'));
+ExportRobustnessFigures(results.robustness,fullfile(outputRoot,'figures'));
 fprintf('Saved figures, tables and baseline.mat in outputs/.\n');
 diary off;

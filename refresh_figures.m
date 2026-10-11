@@ -6,4 +6,7 @@ savedFile = fullfile(projectRoot,'outputs','results','baseline.mat');
 assert(isfile(savedFile), 'No saved results. Run main first.');
 saved = load(savedFile,'results','data');
 ExportAnalysisFigures(saved.results,saved.data,fullfile(projectRoot,'outputs','figures'));
-fprintf('Re-exported five PNG/PDF figures from saved results, with a fixed light theme.\n');
+if isfield(saved.results,'robustness')
+    ExportRobustnessFigures(saved.results.robustness,fullfile(projectRoot,'outputs','figures'));
+end
+fprintf('Re-exported available PNG/PDF figures from saved results, with a fixed light theme.\n');
